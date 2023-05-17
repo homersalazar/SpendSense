@@ -1,0 +1,28 @@
+@import url('loading.css');
+:root {
+    --pc: #365A08;
+    --sc: #5D9D0B;
+    --tc: #72EB3A;
+    --bg: #fdfbd2;
+    --card: #bfda84;
+    -cardTitle: #efef99;
+}
+
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+ul{
+    text-align: none;
+}
+
+body{
+    background: var(--bg);
+    color: #4f6932;
+}
+
+#myNav{
+    background-color: var(--pc);
+}
