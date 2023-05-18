@@ -2,11 +2,13 @@
 
 @section('content')
     <div class="grid grid-cols-3 justify-center justify-items-center p-4 border-b-2 border-[#adb071]">
-        <div class="cursor-pointer left-arrow">
+        <div class="cursor-pointer minus">
             <i class="fa-solid fa-angle-left text-5xl md:text-6xl"></i>
         </div>
-        <div class="text-4xl font-semibold current-year md:text-6xl"></div>
-        <div class="cursor-pointer right-arrow">
+        <div class="text-4xl font-semibold md:text-6xl num_year"></div>
+        <input type="hidden" class="yearInput" name="yearInput">
+
+        <div class="cursor-pointer plus">
             <i class="fa-solid fa-angle-right text-5xl md:text-6xl"></i>
         </div>
         <div class="pt-4 col-span-3">
@@ -19,60 +21,74 @@
         </div>
     </div>
     @php
-        $currentMonth = date('F');
-        $dataByMonth = [
-            'January' => ['Data 1'],
-            'February' => ['Data 2'],
-            'March' => ['Data 3'],
-            'April' => ['Data 4'],
-            'May' => ['Data 5'],
-            'June' => ['Data 6'],
-            'July' => ['Data 7'],
-            'August' => ['Data 8'],
-            'September' => ['Data 9'],
-            'October' => ['Data 10'],
-            'November' => ['Data 11'],
-            'December' => ['Data 12'],
-            // Include data for other months as needed
-        ];
+        $currentMonth = date('n');
+        $monthNames = array(
+            1 => 'January',
+            2 => 'February',
+            3 => 'March',
+            4 => 'April',
+            5 => 'May',
+            6 => 'June',
+            7 => 'July',
+            8 => 'August',
+            9 => 'September',
+            10 => 'October',
+            11 => 'November',
+            12 => 'December'
+        );
     @endphp
     <div class="grid md:grid-cols-4 max-sm:grid-cols-2 gap-4 p-4">
-        @foreach($dataByMonth as $month => $data)
-            @if(strtotime($month) <= strtotime($currentMonth))
-                <a href="{{ route('months', ['year' => date('Y'), 'month' => strtolower($month)]) }}">
+        @for ($i = 1; $i <= $currentMonth; $i++)
+            <a href="/view?year=inputYear&month={{ $i }}" class="month-link">
                 <div class="bg-[var(--card)] rounded-lg p-4">
                     <div class="font-bold text-2xl text-center font-bold mb-2">
-                        {{ $month }}
+                        {{ $monthNames[$i] }}
                     </div>
                     <div class="text-gray-700 text-center">
-                        @foreach($data as $item)
-                        <p>{{ $item }}</p>
-                        @endforeach
+                        <!-- Additional content within the text-gray-700 div -->
                     </div>
                 </div>
-            @endif
-        @endforeach
+            </a>
+        @endfor
     </div>
 
     <script>
-        const currentYearElement = document.querySelector('.current-year');
-        const leftArrowElement = document.querySelector('.left-arrow');
-        const rightArrowElement = document.querySelector('.right-arrow');
+        const minus = document.querySelector(".minus");
+        const plus = document.querySelector(".plus");
+        const num = document.querySelector(".num_year");
+        const yearInput = document.querySelector(".yearInput");
 
-        // Get the current year
-        const currentYear = new Date().getFullYear();
-        currentYearElement.textContent = currentYear;
+        let currentYear = new Date().getFullYear();
+        num.innerText = currentYear;
+        yearInput.value = currentYear;
 
-        // Event listener for left arrow click
-        leftArrowElement.addEventListener('click', () => {
-            const updatedYear = parseInt(currentYearElement.textContent) - 1;
-            currentYearElement.textContent = updatedYear;
+        plus.addEventListener("click", () => {
+            currentYear++;
+            num.innerText = currentYear;
+            yearInput.value = currentYear;
         });
 
-        // Event listener for right arrow click
-        rightArrowElement.addEventListener('click', () => {
-            const updatedYear = parseInt(currentYearElement.textContent) + 1;
-            currentYearElement.textContent = updatedYear;
+        minus.addEventListener("click", () => {
+            currentYear--;
+            num.innerText = currentYear;
+            yearInput.value = currentYear;
+        });
+
+        yearInput.addEventListener("input", () => {
+            currentYear = parseInt(yearInput.value);
+            num.innerText = currentYear;
+        });
+
+        // Add event listener to month links
+        const monthLinks = document.querySelectorAll('.month-link');
+        monthLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const url = link.href.replace('inputYear', currentYear);
+                window.location.href = url;
+            });
         });
     </script>
+
+
 @endsection

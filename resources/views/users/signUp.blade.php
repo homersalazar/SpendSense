@@ -12,7 +12,7 @@
                     <label for="name" class="text-pc">Name</label>
                     <input type="text" name="name" id="name" class="w-full border border-pc rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-pc" required autofocus>
                     @error('name')
-                        <span>{{ $message }}</span>
+                        <span class="text-red-500">{{ $message }}</span>
                     @enderror
                 </div>
 
@@ -20,7 +20,7 @@
                     <label for="email" class="text-pc">Email</label>
                     <input type="email" name="email" id="email" class="w-full border border-pc rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-pc" required>
                     @error('email')
-                        <span>{{ $message }}</span>
+                        <span class="text-red-500">{{ $message }}</span>
                     @enderror
                 </div>
 
@@ -28,7 +28,7 @@
                     <label for="password" class="text-pc">Password</label>
                     <input type="password" name="password" id="password" class="w-full border border-pc rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-pc" required>
                     @error('password')
-                        <span>{{ $message }}</span>
+                        <span class="text-red-500">{{ $message }}</span>
                     @enderror
                 </div>
 

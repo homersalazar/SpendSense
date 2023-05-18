@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CalendarController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
@@ -22,6 +23,11 @@ Route::get('/', function () {
 Route::resource('/user', UserController::class);
 Route::post('/login', [UserController::class, 'login'])->name('login');
 
-Route::get('/calendar', function () {
-    return view('calendar.index');
-});
+
+Route::resource('/calendar', CalendarController::class);
+Route::get('/view', [CalendarController::class, 'view']);
+Route::post('/view', [CalendarController::class, 'view']);
+
+
+
+

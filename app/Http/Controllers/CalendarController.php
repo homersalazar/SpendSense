@@ -1,12 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class CalendarController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +13,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('users.signIn');
+        return view('calendar.index');
     }
 
     /**
@@ -25,7 +23,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.signUp');
+        //
     }
 
     /**
@@ -36,36 +34,40 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6|confirmed',
-        ]);
-
-        User::create([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'password' => bcrypt($validatedData['password']),
-        ]);
-
-        return redirect('/')->with('success', 'Your account has been created!');
+        //
     }
 
-    public function login(Request $request)
+    public function view(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        $year = $request->query('year');
+        $month = $request->query('month');
+        $monthNames = array(
+            1 => 'January',
+            2 => 'February',
+            3 => 'March',
+            4 => 'April',
+            5 => 'May',
+            6 => 'June',
+            7 => 'July',
+            8 => 'August',
+            9 => 'September',
+            10 => 'October',
+            11 => 'November',
+            12 => 'December'
+        );
+        $matchedMonth = null;
 
-        if (Auth::attempt($credentials)) {
-            // Authentication passed...
-            return redirect('/calendar')->with('success', 'Login successful!');
+        foreach ($monthNames as $key => $value) {
+            if ($key == $month) {
+                $matchedMonth = $value;
+                break;
+            }
         }
 
-        return redirect()->back()->withErrors(['email' => 'Invalid credentials']);
-
-
+        return view('calendar.view', [
+            'year' => $year,
+            'month' => $month
+        ]);
     }
     /**
      * Display the specified resource.
