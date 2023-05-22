@@ -1,51 +1,43 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="grid grid-cols-3 max-sm:grid-rows-4 justify-center justify-items-center border-b-2 border-[#adb071]">
-        <div class="col-span-3">
-            <p class="text-lg font-bold p-2">
-                {{ $year }}
-            </p>
+    <div class="grid grid-cols-1 grid-rows-4 text-center border-b-2 border-[#adb071]">
+        <div class="text-lg font-bold">
+            {{ $year }}
         </div>
-        <div class="cursor-pointer minus">
-            <i class="fa-solid fa-angle-left text-5xl md:text-6xl"></i>
-        </div>
-        <div class="text-4xl font-semibold md:text-6xl month">{{ $month }}</div>
-        <div class="cursor-pointer plus">
-            <i class="fa-solid fa-angle-right text-5xl md:text-6xl"></i>
-        </div>
-        <div class="pt-2 col-span-3">
-            <p class="text-xl text-[##99b26c] font-bold">Income</p>
-        </div>
-        <div class="col-span-3">
-            <p class="text-2xl font-bold">
-                {{ number_format(0,2) }}
-            </p>
+        <div class="text-4xl font-bold md:text-6xl">{{ $matchedMonth }}</div>
+        <div class="text-xl text-[#99b26c] font-bold">Income</div>
+        <div class="text-2xl font-bold">
+            {{ number_format(0, 2) }}
         </div>
     </div>
+    @php
+        $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+    @endphp
+
+    <div class="grid md:grid-cols-1 max-sm:grid-cols-1 gap-4 p-4 font-semibold">
+        <table id="income-table">
+            @for($day = 1; $day <= $daysInMonth; $day++)
+                @php
+                    $date = date("j", mktime(0, 0, 0, $month, $day, $year));
+                    $dayName = date("l", mktime(0, 0, 0, $month, $day, $year));
+                @endphp
+                <tr>
+                    <td class="border-b-2 p-1 cursor-pointer" onclick="fetchDate('{{ $year }}', '{{ $date }}', '{{ $dayName }}', '{{ $matchedMonth }}')">
+                        {{ $date }} - {{ $dayName }}
+                    </td>
+                </tr>
+            @endfor
+        </table>
+    </div>
+
     <script>
-        const minus = document.querySelector(".minus");
-        const plus = document.querySelector(".plus");
-        const monthElement = document.querySelector(".month");
-
-        let currentMonth = {{ $month }}; // Get the current month value from the server-side variable
-
-        minus.addEventListener("click", () => {
-            currentMonth--;
-            updateMonth();
-        });
-
-        plus.addEventListener("click", () => {
-            currentMonth++;
-            updateMonth();
-        });
-
-        function updateMonth() {
-            // Update the displayed month
-            monthElement.innerText = currentMonth;
-
-            // Perform additional actions or update the UI as needed
-            // You can make an AJAX request or update other elements based on the new month value
+        const fetchDate = (year, date, day, month) =>{
+            const url = '/income?year=' + year + '&date=' + date + '&day=' + day + '&month=' + month;
+            window.location.href = url;
         }
     </script>
+
+
+
 @endsection

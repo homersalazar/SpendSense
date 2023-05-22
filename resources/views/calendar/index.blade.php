@@ -86,6 +86,7 @@
                 e.preventDefault();
                 const urls = link.href.replace('inputYear', currentYear);
                 window.location.href = urls;
+
                 const url = link.getAttribute('href');
 
                 fetch(url)

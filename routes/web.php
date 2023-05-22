@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\IncomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
@@ -28,6 +29,6 @@ Route::resource('/calendar', CalendarController::class);
 Route::get('/view', [CalendarController::class, 'view']);
 Route::post('/view', [CalendarController::class, 'view']);
 
-
+Route::resource('/income', IncomeController::class);
 
 

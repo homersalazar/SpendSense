@@ -4,17 +4,30 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class CalendarController extends Controller
+class IncomeController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('calendar.index');
+        $year = $request->input('year');
+        $date = $request->input('date');
+        $month = $request->input('month');
+        $day = $request->input('day');
+
+        // Perform further processing or handle the parameters as needed
+
+        return view('income.index', [
+            'year' => $year,
+            'month' => $month,
+            'date' => $date,
+            'day' => $day
+        ]);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -37,38 +50,6 @@ class CalendarController extends Controller
         //
     }
 
-    public function view(Request $request)
-    {
-        $year = $request->query('year');
-        $month = $request->query('month');
-        $monthNames = array(
-            1 => 'January',
-            2 => 'February',
-            3 => 'March',
-            4 => 'April',
-            5 => 'May',
-            6 => 'June',
-            7 => 'July',
-            8 => 'August',
-            9 => 'September',
-            10 => 'October',
-            11 => 'November',
-            12 => 'December'
-        );
-        $matchedMonth = null;
-
-        foreach ($monthNames as $key => $value) {
-            if ($key == $month) {
-                $matchedMonth = $value;
-                break;
-            }
-        }
-        return view('calendar.view', [
-            'year' => $year,
-            'matchedMonth' => $matchedMonth,
-            'month' => $month
-        ]);
-    }
     /**
      * Display the specified resource.
      *
