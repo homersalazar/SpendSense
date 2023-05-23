@@ -8,7 +8,7 @@
         <div class="text-4xl font-bold md:text-6xl">{{ $matchedMonth }}</div>
         <div class="text-xl text-[#99b26c] font-bold">Income</div>
         <div class="text-2xl font-bold">
-            {{ number_format(0, 2) }}
+            {{ number_format(1, 2) }}
         </div>
     </div>
     @php
@@ -23,7 +23,7 @@
                     $dayName = date("l", mktime(0, 0, 0, $month, $day, $year));
                 @endphp
                 <tr>
-                    <td class="border-b-2 p-1 cursor-pointer" onclick="fetchDate('{{ $year }}', '{{ $date }}', '{{ $dayName }}', '{{ $matchedMonth }}')">
+                    <td class="border-b-2 border-[#adb071] p-1 cursor-pointer" onclick="fetchDate('{{ $year }}', '{{ $date }}', '{{ $dayName }}', '{{ $matchedMonth }}')">
                         {{ $date }} - {{ $dayName }}
                     </td>
                 </tr>

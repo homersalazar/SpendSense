@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Budget;
+use Illuminate\Support\Facades\Auth;
 
 class IncomeController extends Controller
 {
@@ -18,13 +20,22 @@ class IncomeController extends Controller
         $month = $request->input('month');
         $day = $request->input('day');
 
-        // Perform further processing or handle the parameters as needed
+        $table = Budget::where('month', $month)
+            ->where('year', $year)
+            ->where('date', $date)
+            ->get();
 
+        $total = Budget::where('month', $month)
+        ->where('year', $year)
+        ->where('date', $date)
+        ->sum('amount');
         return view('income.index', [
             'year' => $year,
             'month' => $month,
             'date' => $date,
-            'day' => $day
+            'day' => $day,
+            'table' => $table,
+            'total' => $total
         ]);
     }
 
@@ -47,7 +58,21 @@ class IncomeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //model mo homer
+        $this->validate($request,[
+            'details' => 'required',
+            'amount' => 'required'
+        ]);
+        $income = new Budget;
+        $income->user_id = Auth::id(); // employee id
+        $income->action = 0; // 0 - income, 1 - expenses
+        $income->details = $request->details;
+        $income->amount = $request->amount;
+        $income->month = $request->month;
+        $income->date = $request->date;
+        $income->year = $request->year;
+        $income->save();
+        return redirect()->back()->with('success', 'adeed successfully.');
     }
 
     /**
