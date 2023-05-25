@@ -19,9 +19,7 @@ return new class extends Migration
             $table->smallInteger('action');
             $table->string('details')->nullable();
             $table->integer('amount')->nullable();
-            $table->integer('date')->nullable();
-            $table->string('month')->nullable();
-            $table->integer('year')->nullable();
+            $table->date('inputDate')->nullable();
             $table->timestamps();
         });
     }

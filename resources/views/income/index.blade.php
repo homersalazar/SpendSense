@@ -1,67 +1,70 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="grid grid-rows-5 grid-cols-1 text-center border-b-2 border-[#adb071] pb-2">
-        <div class="text-left pl-5 cursor-pointer">
-            <a href="{{ url()->previous() }}">
-                <i class="fas fa-chevron-left fa-xl"></i>
-            </a>
-        </div>
-        <div class="font-bold text-lg">
-            <span class="font-bold">{{ $month }}</span> {{ $date }}, {{ $year }}
-        </div>
-        <div class="text-4xl font-bold">{{ $day }}</div>
-        <div class="text-xl text-[#99b26c] font-bold pt-2">Income</div>
-        <div class="text-2xl pt-2 font-bold">
-            {{ number_format($total, 2) }}
-        </div>
-    </div>
-    <div class="grid grid-rows-1 grid-cols-2 p-2 font-bold">
-        <div>2 item(s)</div>
-        <div class="text-right">DELETE</div>
-    </div>
-    <div class="grid grid-rows-1 grid-cols-1 p-2 font-bold">
-        <table>
-            @foreach($table as $tables)
-                <tr class="border-b-2 border-[#adb071]">
-                    <td>{{ ucwords($tables->details) }}</td>
-                    <td class="text-right">{{  number_format($tables->amount,2) }}</td>
-                </tr>
-            @endforeach
-        </table>
-    </div>
-    <div class="bg-[#99b865] fixed bottom-0 w-full max-w-screen-full mx-auto h-20 font-bold p-1">
-        <label for="">New:</label>
-        <form action="{{ route('income.store') }}" method="POST" id="incomeForm">
+    <div class="grid grid-cols-3 justify-center justify-items-center p-4 border-b-2 border-[#adb071]">
+        <form id="decrement-form">
             @csrf
-            <div class="flex flex-row gap-2">
-                <div class="flex-auto">
-                    <input type="text" name="details" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--sc)]" placeholder="Details" required>
+            <button type="submit" id="decrement-btn">
+                <i class="fa-solid fa-angle-left text-5xl md:text-6xl"></i>
+            </button>
+        </form>
+        {{-- <div class="text-4xl font-semibold md:text-6xl">{{ date('Y', strtotime($currentDate)) }}</div> --}}
+        <div class="text-4xl font-semibold md:text-6xl">{{ $years }}</div>
+        <form id="increment-form">
+            @csrf
+            <button type="submit" id="increment-btn">
+                <i class="fa-solid fa-angle-right text-5xl md:text-6xl"></i>
+            </button>
+        </form>
+        <div class="pt-4 col-span-3">
+            <p class="text-xl text-[#99b26c] font-bold">Income</p>
+        </div>
+        <div class="col-span-3">
+            <p class="text-2xl font-bold p-2">
+                {{ number_format($income, 2) }}
+            </p>
+        </div>
+    </div>
+    <div class="grid md:grid-cols-4 max-sm:grid-cols-2 gap-4 p-4">
+        @for ($i = 1; $i <= $currentMonth; $i++)
+            @php $monthName = date('F', mktime(0, 0, 0, $i, 1));
+                session(['selectedMonth' => $monthName]);
+            @endphp
+            <div class="bg-[var(--card)] rounded-lg p-4 month-link" data-month="{{ $i }}">
+                <div class="font-bold text-2xl text-center font-bold mb-2">
+                    {{ $monthName }}
                 </div>
-                <div class="flex-auto">
-                    <input type="number" name="amount" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--sc)]" placeholder="Amount" required>
-                </div>
-                <div class="flex-auto">
-                    <input type="hidden" name="month" value="{{ $month }}">
-                    <input type="hidden" name="date" value="{{ $date }}">
-                    <input type="hidden" name="year" value="{{ $year }}">
-                    <button type="submit" id="save" class="bg-[var(--pc)] hover:bg-[var(--pc)] text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-[var(--pc)]">Save</button>
+                <div class="text-gray-700 text-center">
+                    {{-- {{ $total }} --}}
                 </div>
             </div>
-        </form>
+        @endfor
     </div>
-    {{-- <script>
-        const submit = document.getElementById('save');
-        submit.addEventListener('click', function() {
-            $.ajax({
-                url:"{{ route('income.store') }}",
-                type: "POST",
-                data:$('#incomeForm').serialize(),
-                dataType: 'json',
-                success:function(data){
+    <script>
+        $(document).ready(function () {
+            $("#decrement-form").submit(function (event) {
+                $.ajax({
+                    url:"{{ route('income.decrement') }}",
+                    type: "POST",
+                    data:$('#decrement-form').serialize(),
+                    dataType: 'json',
+                    success:function(data){
+                        console.log(data);
+                    }
+                });
+            });
 
-                }
+            $("#increment-form").submit(function (event) {
+                $.ajax({
+                    url:"{{ route('income.increment') }}",
+                    type: "POST",
+                    data:$('#increment-form').serialize(),
+                    dataType: 'json',
+                    success:function(data){
+                        console.log(data);
+                    }
+                });
             });
         });
-    </script> --}}
+    </script>
 @endsection

@@ -60,7 +60,7 @@ class UserController extends Controller
 
         if (Auth::attempt($credentials)) {
             // Authentication passed...
-            return redirect('/calendar')->with('success', 'Login successful!');
+            return redirect('/income')->with('success', 'Login successful!');
         }
 
         return redirect()->back()->withErrors(['email' => 'Invalid credentials']);

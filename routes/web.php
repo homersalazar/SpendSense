@@ -24,11 +24,11 @@ Route::get('/', function () {
 Route::resource('/user', UserController::class);
 Route::post('/login', [UserController::class, 'login'])->name('login');
 
-
-Route::resource('/calendar', CalendarController::class);
-Route::get('/view', [CalendarController::class, 'view']);
-Route::post('/view', [CalendarController::class, 'view']);
-
+//income
 Route::resource('/income', IncomeController::class);
-
-
+Route::get('/view', [IncomeController::class, 'view']);
+Route::post('/view', [IncomeController::class, 'view']);
+Route::get('/add', [IncomeController::class, 'add']);
+Route::post('/add', [IncomeController::class, 'add']);
+Route::post('/decrement', [IncomeController::class, 'decrement'])->name('income.decrement');
+Route::post('/increment', [IncomeController::class, 'increment'])->name('income.increment');

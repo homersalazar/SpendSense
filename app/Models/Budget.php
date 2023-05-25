@@ -13,8 +13,7 @@ class Budget extends Model
         'action',
         'details',
         'amount',
-        'month',
-        'date',
-        'year'
+        'inputDate'
+
     ];
 }
