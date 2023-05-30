@@ -16,7 +16,7 @@
     <title>SpendSense</title>
 </head>
 <body>
-    <div id="myNav" class="fixed w-full h-screen hidden">
+    <div id="myNav" class="fixed w-full h-screen hidden z-10">
         <a href="javascript:void(0)" class="absolute top-4 right-6 text-4xl text-white cursor-pointer" onclick="closeNav()">&times;</a>
         <div class="flex flex-col items-center justify-center h-full">
           <a href="/income" class="text-3xl text-white py-4 font-semibold">Income</a>

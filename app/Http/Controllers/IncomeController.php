@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
-
 class IncomeController extends Controller
 {
     /**
@@ -16,24 +15,29 @@ class IncomeController extends Controller
      */
     public function index(Request $request)
     {
-        $currentMonth = date('n');
         $currentDate = $request->session()->get('current_date', now());
         $years =  date('Y', strtotime($currentDate));
         $user_id = Auth::id();
         $action = 0; // 0 - income, 1 - expenses
-        $budget = Budget::whereRaw("YEAR(inputDate) =  $years")
+        $budgetQuery = Budget::query()
+            ->whereYear('inputDate', $years)
             ->where('user_id', $user_id)
-            ->where('action', $action)
-            ->get();
+            ->where('action', $action);
+        $budget = $budgetQuery->get();
         $income = $budget->sum('amount');
 
-        $selectedMonth = $request->session()->get('selectedMonth');
-        // $total = Budget::where('user_id', $user_id)
-        // ->where('action', $action)
-        // ->whereMonth('inputDate', $i)
-        // ->whereYear('inputDate', $years)
-        // ->sum('amount');
-        return view('income.index', compact('years', 'income' , 'currentMonth'));
+        $monthlyTotals = [];
+        $currentMonth = date('n');
+        for ($i = 1; $i <= $currentMonth; $i++) {
+            $total = $budgetQuery->whereMonth('inputDate', $i)->sum('amount');
+            $monthlyTotals[$i] = $total;
+        }
+        return view('income.index',[
+            'years' => $years,
+            'total' => $total,
+            'income' => $income,
+            'monthlyTotals' => $monthlyTotals
+        ]);
     }
 
     public function decrement(Request $request)
@@ -86,41 +90,37 @@ class IncomeController extends Controller
     }
     public function view(Request $request)
     {
-        $year = $request->query('year');
-        $month = $request->query('month');
-
+        $year = $request->input('year');
+        $month = $request->input('month');
+        $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
         $monthNames = [
-            'January' => 1,
-            'February' => 2,
-            'March' => 3,
-            'April' => 4,
-            'May' => 5,
-            'June' => 6,
-            'July' => 7,
-            'August' => 8,
-            'September' => 9,
-            'October' => 10,
-            'November' => 11,
-            'December' => 12
+            1 => 'January',
+            2 => 'February',
+            3 => 'March',
+            4 => 'April',
+            5 => 'May',
+            6 => 'June',
+            7 => 'July',
+            8 => 'August',
+            9 => 'September',
+            10 => 'October',
+            11 => 'November',
+            12 => 'December'
         ];
-        foreach($monthNames as $key => $value){
-            if($month == $value){
-                $matchMonth = $key;
-            }
-        }
+
+        $matchMonth = $monthNames[$month] ?? null;
         $user_id = Auth::id();
         $action = 0; // 0 - income, 1 - expenses
-        $budget = Budget::whereRaw("YEAR(inputDate) = $year AND MONTH(inputDate) = $month")
+        $income = Budget::whereYear('inputDate', $year)
+            ->whereMonth('inputDate', $month)
             ->where('user_id', $user_id)
             ->where('action', $action)
-            ->get();
-        $income = $budget->sum('amount');
+            ->sum('amount');
 
         $selectedDate = $request->session()->get('selectedDate');
         $totals = [];
         for ($i = 1; $i <= $selectedDate; $i++) {
-            $date = sprintf('%04d-%02d-%02d', $year, $month, $i);
-
+            $date = Carbon::createFromDate($year, $month, $i)->format('Y-m-d');
             $total = Budget::where('user_id', $user_id)
                 ->where('action', $action)
                 ->whereDate('inputDate', $date)
@@ -128,11 +128,11 @@ class IncomeController extends Controller
 
             $totals[$i] = $total;
         }
-        return view('income.view',[
+        return view('income.view', [
             'year' => $year,
             'month' => $month,
+            'daysInMonth' => $daysInMonth,
             'matchMonth' => $matchMonth,
-            'budget' => $budget,
             'totals' => $totals,
             'income' => $income
         ]);
@@ -141,10 +141,9 @@ class IncomeController extends Controller
     public function add(Request $request)
     {
         $year = $request->input('year');
-        $date = $request->input('date');
         $month = $request->input('month');
+        $date = $request->input('date');
         $day = $request->input('day');
-
         $monthNames = [
             'January' => 1,
             'February' => 2,
@@ -159,11 +158,8 @@ class IncomeController extends Controller
             'November' => 11,
             'December' => 12
         ];
-        foreach($monthNames as $key => $value){
-            if($value == $month){
-                $matchedMonth = $key;
-            }
-        }
+        $matchedMonth = array_search($month, $monthNames);
+        $displayDate = implode(' ', [$matchedMonth, $date. ',', $year]);
         $income = implode('-', [$year, $month, $date]);
         $user_id = Auth::id();
         $action = 0;
@@ -174,14 +170,12 @@ class IncomeController extends Controller
         $item = $table->count();
         $total = $table->sum('amount');
         return view('income.create',[
-            'year' => $year,
-            'month' => $month,
-            'date' => $date,
+            'displayDate' => $displayDate,
             'day' => $day,
-            'table' => $table,
             'item' => $item,
             'total' => $total,
-            "matchedMonth" => $matchedMonth
+            'table' => $table,
+            'income' => $income
         ]);
     }
     /**
@@ -229,3 +223,4 @@ class IncomeController extends Controller
         //
     }
 }
+

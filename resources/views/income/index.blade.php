@@ -21,24 +21,29 @@
         </div>
         <div class="col-span-3">
             <p class="text-2xl font-bold p-2">
-                {{ number_format($income, 2) }}
+                {{ number_format($income) }}
             </p>
         </div>
     </div>
     <div class="grid md:grid-cols-4 max-sm:grid-cols-2 gap-4 p-4">
-        @for ($i = 1; $i <= $currentMonth; $i++)
-            @php $monthName = date('F', mktime(0, 0, 0, $i, 1));
-                session(['selectedMonth' => $monthName]);
+        @foreach ($monthlyTotals as $month => $total)
+            @php
+                $monthName = date('F', mktime(0, 0, 0, $month, 1));
             @endphp
-            <div class="bg-[var(--card)] rounded-lg p-4 month-link" data-month="{{ $i }}">
-                <div class="font-bold text-2xl text-center font-bold mb-2">
-                    {{ $monthName }}
+            <form action="/view" method="POST">
+                @csrf
+                <input type="hidden" name="month" value="{{ $month }}">
+                <input type="hidden" name="year" value="{{ $years }}">
+                <div class="bg-[var(--card)] rounded-lg p-4 cursor-pointer" onclick="this.parentNode.submit();">
+                    <div class="font-bold text-2xl text-center font-bold mb-2">
+                        {{ $monthName }}
+                    </div>
+                    <div class="text-gray-700 text-center font-bold">
+                        {{  number_format($total,2) ? : ''}}
+                    </div>
                 </div>
-                <div class="text-gray-700 text-center">
-                    {{-- {{ $total }} --}}
-                </div>
-            </div>
-        @endfor
+            </form>
+        @endforeach
     </div>
     <script>
         $(document).ready(function () {

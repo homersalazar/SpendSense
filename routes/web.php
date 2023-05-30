@@ -25,10 +25,11 @@ Route::resource('/user', UserController::class);
 Route::post('/login', [UserController::class, 'login'])->name('login');
 
 //income
-Route::resource('/income', IncomeController::class);
-Route::get('/view', [IncomeController::class, 'view']);
-Route::post('/view', [IncomeController::class, 'view']);
-Route::get('/add', [IncomeController::class, 'add']);
-Route::post('/add', [IncomeController::class, 'add']);
+Route::resource('/income', IncomeController::class); // first
 Route::post('/decrement', [IncomeController::class, 'decrement'])->name('income.decrement');
 Route::post('/increment', [IncomeController::class, 'increment'])->name('income.increment');
+Route::match(['get', 'post'],'/view', [IncomeController::class, 'view']); // second
+Route::match(['get', 'post'],'/add', [IncomeController::class, 'add']); // third
+
+Route::get('/create', [IncomeController::class, 'create']);
+Route::post('/create', [IncomeController::class, 'create']);

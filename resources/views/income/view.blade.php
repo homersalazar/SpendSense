@@ -18,11 +18,52 @@
             {{ number_format($income,0) }}
         </div>
     </div>
-    @php
-        $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
-    @endphp
+    <form id="dateForm" action="/add" method="POST">
+        @csrf
+        <input type="hidden" name="year" id="yearInput">
+        <input type="hidden" name="date" id="dateInput">
+        <input type="hidden" name="day" id="dayInput">
+        <input type="hidden" name="month" id="monthInput">
+    </form>
 
     <div class="grid md:grid-cols-1 max-sm:grid-cols-1 gap-1 font-semibold pt-2">
+        @for($day = 1; $day <= $daysInMonth; $day++)
+            @php
+                $date = date("j", mktime(0, 0, 0, $month, $day, $year));
+                $dayName = date("l", mktime(0, 0, 0, $month, $day, $year));
+                session(['selectedDate' => $date]);
+                $total = isset($totals[$date]) ? $totals[$date] : 0;
+            @endphp
+            <div class="border-b-2 border-[#adb071] cursor-pointer" onclick="submitForm('{{ $year }}', '{{ $date }}', '{{ $dayName }}', '{{ $month }}')">
+                <div class="flex justify-between">
+                    <span class="pl-3 ">{{ $date }} - {{ $dayName }}</span>
+                    <span class="pr-3">{{ $total !== null ? number_format($total) : 'null' }}</span>
+                </div>
+            </div>
+        @endfor
+    </div>
+
+    <script>
+        const submitForm = (year, date, day, month) => {
+            const yearInput = document.getElementById('yearInput');
+            const dateInput = document.getElementById('dateInput');
+            const dayInput = document.getElementById('dayInput');
+            const monthInput = document.getElementById('monthInput');
+            yearInput.value = year;
+            dateInput.value = date;
+            dayInput.value = day;
+            monthInput.value = month;
+
+            const form = document.getElementById('dateForm');
+            form.submit();
+        }
+    </script>
+
+
+
+
+
+    {{-- <div class="grid md:grid-cols-1 max-sm:grid-cols-1 gap-1 font-semibold pt-2">
         @for($day = 1; $day <= $daysInMonth; $day++)
             @php
                 $date = date("j", mktime(0, 0, 0, $month, $day, $year));
@@ -43,7 +84,7 @@
             const url = '/add?year=' + year + '&month=' + month + '&date=' + date + '&day=' + day;
             window.location.href = url;
         }
-    </script>
+    </script> --}}
 
 
 
