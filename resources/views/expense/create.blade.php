@@ -6,8 +6,8 @@
             <span class="font-bold">{{ $displayDate }}</span>
         </div>
         <div class="text-4xl font-bold">{{ $day }}</div>
-        <div class="text-xl text-[#99b26c] font-bold pt-2">Income</div>
-        <div class="text-2xl pt-2 font-bold">
+        <div class="text-xl text-[#99b26c] font-bold pt-2">Expense</div>
+        <div class="text-2xl text-red-600 pt-2 font-bold">
             {{ number_format($total, 2) }}
         </div>
     </div>
@@ -20,14 +20,14 @@
             @foreach($table as $tables)
                 <tr class="border-b-2 border-[#adb071]">
                     <td>{{ ucwords($tables->details) }}</td>
-                    <td class="text-right">{{  number_format($tables->amount,2) }}</td>
+                    <td class="text-right text-red-600">{{  number_format($tables->amount,2) }}</td>
                 </tr>
             @endforeach
         </table>
     </div>
-    <div class="bg-[#99b865] fixed  bottom-0 w-full max-w-screen-full mx-auto h-20 font-bold p-1 mt-11">
-        <label for="">New:</label>
-        <form id="incomeForm">
+    <div class="bg-[#99b865] fixed bottom-0 w-full max-w-screen-full mx-auto h-20 font-bold p-1 mt-11 md:flex justify-center items-center">
+        <label class="md:hidden">New:</label>
+        <form id="expenseForm">
             @csrf
             <div class="flex flex-row gap-2">
                 <div class="flex-auto">
@@ -44,39 +44,26 @@
         </form>
     </div>
     <script>
-        // $(document).ready(function () {
-        //     $("#incomeForm").submit(function (event) {
-        //         $.ajax({
-        //             url:"{{ route('income.store') }}",
-        //             type: "POST",
-        //             data:$('#incomeForm').serialize(),
-        //             dataType: 'json',
-        //             success:function(data){
-        //                 console.log(data);
-        //             }
-        //         });
-        //     });
-        // });
         $(document).ready(function () {
-        $("#incomeForm").submit(function (event) {
-            event.preventDefault(); // Prevent the default form submission
+            $("#expenseForm").submit(function (event) {
+                event.preventDefault(); // Prevent the default form submission
 
-            $.ajax({
-                url: "{{ route('income.store') }}",
-                type: "POST",
-                data: $(this).serialize(),
-                dataType: 'json',
-                success: function (data) {
-                    console.log(data);
-                    // Handle the success response here
-                    window.location.reload();
-                },
-                error: function (error) {
-                    console.log(error);
-                    // Handle the error response here
-                }
+                $.ajax({
+                    url: "{{ route('expense.store') }}",
+                    type: "POST",
+                    data: $(this).serialize(),
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+                        // Handle the success response here
+                        window.location.reload();
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        // Handle the error response here
+                    }
+                });
             });
         });
-    });
     </script>
 @endsection

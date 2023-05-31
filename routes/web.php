@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -28,8 +29,10 @@ Route::post('/login', [UserController::class, 'login'])->name('login');
 Route::resource('/income', IncomeController::class); // first
 Route::post('/decrement', [IncomeController::class, 'decrement'])->name('income.decrement');
 Route::post('/increment', [IncomeController::class, 'increment'])->name('income.increment');
-Route::match(['get', 'post'],'/view', [IncomeController::class, 'view']); // second
+Route::match(['get', 'post'],'/view', [IncomeController::class, 'view'])->name('income.view'); // second
 Route::match(['get', 'post'],'/add', [IncomeController::class, 'add']); // third
 
-Route::get('/create', [IncomeController::class, 'create']);
-Route::post('/create', [IncomeController::class, 'create']);
+//expense
+Route::resource('/expense', ExpenseController::class);
+Route::match(['get', 'post'],'/viewExpense', [ExpenseController::class, 'viewExpense']); // second
+Route::match(['get', 'post'],'/createExpense', [ExpenseController::class, 'createExpense']);

@@ -6,25 +6,20 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
-class IncomeController extends Controller
+class ExpenseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $currentDate = $request->session()->get('current_date', now());
         $years =  date('Y', strtotime($currentDate));
         $user_id = Auth::id();
-        $action = 0; // 0 - income, 1 - expenses
+        $action = 1; // 0 - income, 1 - expenses
         $budgetQuery = Budget::query()
             ->whereYear('inputDate', $years)
             ->where('user_id', $user_id)
             ->where('action', $action);
         $budget = $budgetQuery->get();
-        $income = $budget->sum('amount');
+        $expense = $budget->sum('amount');
 
         $monthlyTotals = [];
         $currentMonth = date('n');
@@ -34,65 +29,15 @@ class IncomeController extends Controller
             $monthlyTotals[$i] = $total;
         }
 
-        return view('income.index',[
+        return view('expense.index',[
             'years' => $years,
             'total' => $total,
-            'income' => $income,
+            'expense' => $expense,
             'monthlyTotals' => $monthlyTotals
         ]);
     }
 
-    public function decrement(Request $request)
-    {
-        $currentDate = Carbon::parse($request->session()->get('current_date', now()));
-        $currentDate->subYear(); // Decrement the year by 1
-        $request->session()->put('current_date', $currentDate);
-        return redirect()->back();
-    }
-
-    public function increment(Request $request)
-    {
-        $currentDate = Carbon::parse($request->session()->get('current_date', now()));
-        $currentDate->addYear(); // Increment the year by 1
-        $request->session()->put('current_date', $currentDate);
-        return redirect()->back();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $this->validate($request,[
-            'details' => 'required',
-            'amount' => 'required'
-        ]);
-        $income = new Budget;
-        $income->user_id = Auth::id(); // employee id
-        $income->action = 0; // 0 - income, 1 - expenses
-        $income->details = $request->details;
-        $income->amount = $request->amount;
-        $income->inputDate = $request->input_date;
-        $income->save();
-        return response()->json(['success' => ucwords($request->details) . ' has been added successfully.']);
-
-        // return redirect()->route('income.view')->with('success',' '.ucwords($request->details).' has been added successfully.');
-
-    }
-    public function view(Request $request)
+    public function viewExpense(Request $request)
     {
         $year = $request->input('year');
         $month = $request->input('month');
@@ -114,12 +59,12 @@ class IncomeController extends Controller
 
         $matchMonth = $monthNames[$month] ?? null;
         $user_id = Auth::id();
-        $action = 0; // 0 - income, 1 - expenses
+        $action = 1; // 0 - income, 1 - expenses
         $budgetQuery = Budget::whereYear('inputDate', $year)
             ->whereMonth('inputDate', $month)
             ->where('user_id', $user_id)
             ->where('action', $action);
-        $income = $budgetQuery->sum('amount');
+        $expense = $budgetQuery->sum('amount');
 
         $selectedDate = $request->session()->get('selectedDate');
         $totals = [];
@@ -132,17 +77,17 @@ class IncomeController extends Controller
 
             $totals[$i] = $total;
         }
-        return view('income.view', [
+        return view('expense.view', [
             'year' => $year,
             'month' => $month,
             'daysInMonth' => $daysInMonth,
             'matchMonth' => $matchMonth,
             'totals' => $totals,
-            'income' => $income
+            'expense' => $expense
         ]);
     }
 
-    public function add(Request $request)
+    public function createExpense(Request $request)
     {
         $year = $request->input('year');
         $month = $request->input('month');
@@ -166,14 +111,14 @@ class IncomeController extends Controller
         $displayDate = implode(' ', [$matchedMonth, $date. ',', $year]);
         $dateInput = implode('-', [$year, $month, $date]);
         $user_id = Auth::id();
-        $action = 0;
+        $action = 1;
         $table = Budget::where('inputDate', $dateInput)
             ->where('user_id', $user_id)
             ->where('action', $action)
             ->get();
         $item = $table->count();
         $total = $table->sum('amount');
-        return view('income.create',[
+        return view('expense.create',[
             'displayDate' => $displayDate,
             'day' => $day,
             'item' => $item,
@@ -182,49 +127,21 @@ class IncomeController extends Controller
             'dateInput' => $dateInput
         ]);
     }
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function store(Request $request)
     {
-        //
-    }
+        $this->validate($request,[
+            'details' => 'required',
+            'amount' => 'required'
+        ]);
+        $income = new Budget;
+        $income->user_id = Auth::id(); // employee id
+        $income->action = 1; // 0 - income, 1 - expenses
+        $income->details = $request->details;
+        $income->amount = $request->amount;
+        $income->inputDate = $request->input_date;
+        $income->save();
+        return response()->json(['success' => ucwords($request->details) . ' has been added successfully.']);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }
-

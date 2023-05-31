@@ -6,8 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href={{ asset("css/styles.css") }}>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
     <script src="https://cdn.tailwindcss.com"></script>
+
     {{-- FONT AWESOME --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     {{-- JQUERY --}}
@@ -20,7 +20,7 @@
         <a href="javascript:void(0)" class="absolute top-4 right-6 text-4xl text-white cursor-pointer" onclick="closeNav()">&times;</a>
         <div class="flex flex-col items-center justify-center h-full">
           <a href="/income" class="text-3xl text-white py-4 font-semibold">Income</a>
-          <a href="#" class="text-3xl text-white py-4 font-semibold">Expense</a>
+          <a href="/expense" class="text-3xl text-white py-4 font-semibold">Expense</a>
           <a href="#" class="text-3xl text-white py-4 font-semibold">Report</a>
           <a href="#" class="text-3xl text-white py-4 font-semibold">Misc</a>
         </div>

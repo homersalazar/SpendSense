@@ -16,11 +16,11 @@
             </button>
         </form>
         <div class="pt-4 col-span-3">
-            <p class="text-xl text-[#99b26c] font-bold">Income</p>
+            <p class="text-xl text-[#99b26c] font-bold">Expense</p>
         </div>
-        <div class="col-span-3">
+        <div class="col-span-3 text-red-600">
             <p class="text-2xl font-bold p-2">
-                {{ number_format($income) }}
+                {{ number_format($expense) }}
             </p>
         </div>
     </div>
@@ -29,7 +29,7 @@
             @php
                 $monthName = date('F', mktime(0, 0, 0, $month, 1));
             @endphp
-            <form action="/view" method="POST">
+            <form action="/viewExpense" method="POST">
                 @csrf
                 <input type="hidden" name="month" value="{{ $month }}">
                 <input type="hidden" name="year" value="{{ $years }}">
@@ -37,7 +37,7 @@
                     <div class="font-bold text-2xl text-center font-bold">
                         {{ $monthName }}
                     </div>
-                    <div class="text-center font-bold h-6 text-xl text-green-900">
+                    <div class="text-center font-bold h-6 text-xl text-red-600">
                         {{  number_format($totals) ? : ''}}
                     </div>
                 </div>
