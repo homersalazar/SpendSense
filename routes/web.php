@@ -3,6 +3,7 @@
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
@@ -34,5 +35,8 @@ Route::match(['get', 'post'],'/add', [IncomeController::class, 'add']); // third
 
 //expense
 Route::resource('/expense', ExpenseController::class);
-Route::match(['get', 'post'],'/viewExpense', [ExpenseController::class, 'viewExpense']); // second
+Route::match(['get', 'post'],'/viewExpense', [ExpenseController::class, 'viewExpense']);
 Route::match(['get', 'post'],'/createExpense', [ExpenseController::class, 'createExpense']);
+
+//report
+Route::resource('/report', ReportController::class);

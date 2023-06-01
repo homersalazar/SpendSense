@@ -12,7 +12,8 @@ class Budget extends Model
         'user_id',
         'action',
         'details',
-        'amount',
+        // 'amount',
+        'amount' => 'decimal:2',
         'inputDate'
 
     ];

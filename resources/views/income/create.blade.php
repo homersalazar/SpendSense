@@ -34,7 +34,7 @@
                     <input type="text" name="details" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--sc)]" placeholder="Details" required>
                 </div>
                 <div class="flex-auto">
-                    <input type="number" name="amount" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--sc)]" placeholder="Amount" required>
+                    <input type="text" pattern="[0-9]+([.,][0-9]+)?" name="amount" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--sc)]" placeholder="Amount">
                 </div>
                 <div class="flex-auto">
                     <input type="hidden" name="input_date" value="{{ $dateInput }}">

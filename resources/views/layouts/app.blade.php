@@ -21,7 +21,7 @@
         <div class="flex flex-col items-center justify-center h-full">
           <a href="/income" class="text-3xl text-white py-4 font-semibold">Income</a>
           <a href="/expense" class="text-3xl text-white py-4 font-semibold">Expense</a>
-          <a href="#" class="text-3xl text-white py-4 font-semibold">Report</a>
+          <a href="/report" class="text-3xl text-white py-4 font-semibold">Report</a>
           <a href="#" class="text-3xl text-white py-4 font-semibold">Misc</a>
         </div>
     </div>

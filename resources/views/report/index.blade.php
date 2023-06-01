@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="grid grid-cols-3 justify-center justify-items-center p-4 border-b-2 border-[#adb071]">
+    <div class="grid grid-cols-3 justify-center justify-items-center pt-2 pb-2">
         <form id="decrement-form">
             @csrf
             <button type="submit" id="decrement-btn">
@@ -15,37 +15,9 @@
                 <i class="fa-solid fa-angle-right text-5xl md:text-6xl"></i>
             </button>
         </form>
-        <div class="pt-4 col-span-3">
-            <p class="text-xl text-[#99b26c] font-bold">Income</p>
-        </div>
-        <div class="col-span-3">
-            <p class="text-2xl font-bold p-2">
-                {{ number_format($income,2) }}
-            </p>
-        </div>
     </div>
-    <div class="grid md:grid-cols-4 max-sm:grid-cols-2 gap-4 p-4">
-        @foreach ($monthlyTotals as $month => $totals)
-            @php
-                $monthName = date('F', mktime(0, 0, 0, $month, 1));
-            @endphp
-            <form action="/view" method="POST">
-                @csrf
-                <input type="hidden" name="month" value="{{ $month }}">
-                <input type="hidden" name="year" value="{{ $years }}">
-                <div class="bg-[var(--card)] rounded-lg p-4 cursor-pointer" onclick="this.parentNode.submit();">
-                    <div class="font-bold text-2xl text-center font-bold">
-                        {{ $monthName }}
-                    </div>
-                    <div class="text-center font-bold h-6 text-lg text-green-900">
-                        @if ($totals !== null && $totals != 0)
-                            {{ number_format($totals,2) }}
-                        @endif
-                    </div>
-                </div>
-            </form>
-        @endforeach
-    </div>
+
+
     <script>
         $(document).ready(function () {
             $("#decrement-form").submit(function (event) {

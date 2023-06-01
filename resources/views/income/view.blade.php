@@ -15,7 +15,9 @@
         <div class="text-4xl font-bold md:text-6xl">{{ $matchMonth }}</div>
         <div class="text-xl text-[#99b26c] font-bold">Income</div>
         <div class="text-2xl font-bold">
-            {{ number_format($income,0) }}
+            @if ($income !== null && $income != 0)
+                {{ number_format($income,2) }}
+            @endif
         </div>
     </div>
     <form id="dateForm" action="/add" method="POST">
@@ -37,7 +39,7 @@
                 <div class="flex justify-between pb-2">
                     <span class="pl-3">{{ $date }} - {{ $dayName }}</span>
                     @if ($total !== null && $total != 0)
-                        <span class="pr-3">{{ number_format($total) }}</span>
+                        <span class="pr-3">{{ number_format($total,2) }}</span>
                     @endif
                 </div>
             </div>

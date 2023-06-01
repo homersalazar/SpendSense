@@ -78,13 +78,13 @@ class IncomeController extends Controller
     {
         $this->validate($request,[
             'details' => 'required',
-            'amount' => 'required'
+            'price' => ['numeric', 'between:0,9999.99'],
         ]);
         $income = new Budget;
         $income->user_id = Auth::id(); // employee id
         $income->action = 0; // 0 - income, 1 - expenses
         $income->details = $request->details;
-        $income->amount = $request->amount;
+        $income->amount = floatval(str_replace(',', '', $request->amount));
         $income->inputDate = $request->input_date;
         $income->save();
         return response()->json(['success' => ucwords($request->details) . ' has been added successfully.']);

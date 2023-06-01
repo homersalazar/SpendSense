@@ -18,7 +18,7 @@ return new class extends Migration
             $table->smallInteger('user_id');
             $table->smallInteger('action');
             $table->string('details')->nullable();
-            $table->integer('amount')->nullable();
+            $table->decimal('amount', 8, 2)->nullable();
             $table->date('inputDate')->nullable();
             $table->timestamps();
         });
