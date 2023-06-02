@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Budget;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
@@ -13,10 +14,24 @@ class ReportController extends Controller
      */
     public function index(Request $request)
     {
+
         $currentDate = $request->session()->get('current_date', now());
         $years =  date('Y', strtotime($currentDate));
+        $user_id = Auth::id();
+        // $action = 0; // 0 - income, 1 - expenses
+        $budget = Budget::query()
+            ->whereYear('inputDate', $years)
+            ->where('user_id', $user_id)
+            ->get();
+        $income = $budget->where('action', 0)->sum('amount');
+        $expense = $budget->where('action', 1)->sum('amount');
+        $total = $income - $expense;
         return view('report.index',[
-            'years' => $years
+            'years' => $years,
+            'income' => $income,
+            'expense' => $expense,
+            'total' => $total
+
         ]
         );
     }
