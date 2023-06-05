@@ -40,3 +40,4 @@ Route::match(['get', 'post'],'/createExpense', [ExpenseController::class, 'creat
 
 //report
 Route::resource('/report', ReportController::class);
+Route::match(['get', 'post'],'/basic', [ReportController::class, 'basic']);
