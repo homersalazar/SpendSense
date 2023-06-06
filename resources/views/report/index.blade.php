@@ -50,25 +50,26 @@
                 <div class="w-3/4">
                     <div class="flex flex-col font-bold md:text-xl pl-2">
                         <div class="flex justify-between">
-                        <div class="font-bold">Income</div>
-                        <div>
-                            {{ number_format($data['incomeMonthly'],2) }}
+                            <div class="font-bold">Income</div>
+                            <div>
+                                {{ number_format($data['incomeMonthly'],2) }}
+                            </div>
                         </div>
-                    </div>
-                    <div class="flex justify-between border-b-2 border-[#adb071]">
-                        <div class="font-bold">Expense</div>
-                        <div class="text-red-600">
-                            {{ number_format($data['expenseMonthly'],2) }}
+                        <div class="flex justify-between border-b-2 border-[#adb071]">
+                            <div class="font-bold">Expense</div>
+                            <div class="text-red-600">
+                                {{ number_format($data['expenseMonthly'],2) }}
+                            </div>
                         </div>
-                    </div>
-                    <div class="flex justify-between ">
-                        <div class="font-bold">Total</div>
-                            {{ number_format($data['difference'],2) }}
+                        <div class="flex justify-between ">
+                            <div class="font-bold">Total</div>
+                                {{ number_format($data['difference'],2) }}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     @endforeach
     <script>
         $(document).ready(function () {

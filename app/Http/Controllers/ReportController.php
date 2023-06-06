@@ -69,9 +69,41 @@ class ReportController extends Controller
             11 => 'November',
             12 => 'December'
         ];
-
         $matchMonth = $monthNames[$month] ?? null;
-        return view('report.view');
+        $user_id = Auth::id();
+        $add = 0; // 0 - income, 1 - expenses
+        $minus = 1; // 0 - income, 1 - expenses
+        $budgetQuery = Budget::query()
+            ->whereYear('inputDate', $year)
+            ->whereMonth('inputDate', $month)
+            ->where('user_id', $user_id);
+        $budget = $budgetQuery->get();
+        $income = $budget->where('action', $add)->sum('amount');
+        $expense = $budget->where('action', $minus)->sum('amount');
+        $output = $income - $expense;
+        $dailyTotals = [];
+        for ($i = 1; $i <= $daysInMonth; $i++) {
+            $dailyQuery = clone $budgetQuery;
+            $daily = $dailyQuery->get();
+            $dailyTotals[$i] = [
+                'incomeDaily' => $daily->filter(function ($item) use ($add, $i) {
+                    return $item->action === $add && Carbon::parse($item->inputDate)->day === $i;
+                })->sum('amount'),
+                'expenseDaily' => $daily->filter(function ($item) use ($minus, $i) {
+                    return $item->action === $minus && Carbon::parse($item->inputDate)->day === $i;
+                })->sum('amount'),
+            ];
+        }
+        return view('report.view',[
+            'year' => $year,
+            'month' => $month,
+            'income' => $income,
+            'expense' => $expense,
+            'output' => $output,
+            'matchMonth' => $matchMonth,
+            'daysInMonth' => $daysInMonth,
+            'dailyTotals' => $dailyTotals,
+        ]);
     }
 
     /**

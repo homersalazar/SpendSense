@@ -8,12 +8,12 @@
                     <i class="fas fa-chevron-left fa-xl"></i>
                 </a>
             </div>
-            <div class="text-lg font-bold">
+            <div class="text-3xl max-sm:text-xl font-semibold mt-3">
                 {{ $year }}
             </div>
         </div>
         <div class="text-4xl font-bold md:text-6xl">{{ $matchMonth }}</div>
-        <div class="text-xl text-[#99b26c] font-bold">Income</div>
+        <div class="text-xl text-[#99b26c] font-bold mt-4">Income</div>
         <div class="text-2xl font-bold">
             @if ($income !== null && $income != 0)
                 {{ number_format($income,2) }}
@@ -27,7 +27,7 @@
         <input type="hidden" name="day" id="dayInput">
         <input type="hidden" name="month" id="monthInput">
     </form>
-    <div class="grid md:grid-cols-1 max-sm:grid-cols-1 gap-1 font-semibold pt-2">
+    <div class="grid font-semibold pt-2 md:pr-[5rem] md:pl-[5rem]">
         @for($day = 1; $day <= $daysInMonth; $day++)
             @php
                 $date = date("j", mktime(0, 0, 0, $month, $day, $year));

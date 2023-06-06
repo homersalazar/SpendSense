@@ -20,7 +20,7 @@
         </div>
         <div class="col-span-3 text-red-600">
             <p class="text-2xl font-bold p-2">
-                {{ number_format($expense) }}
+                {{ number_format($expense,2) }}
             </p>
         </div>
     </div>
@@ -34,11 +34,13 @@
                 <input type="hidden" name="month" value="{{ $month }}">
                 <input type="hidden" name="year" value="{{ $years }}">
                 <div class="bg-[var(--card)] rounded-lg p-4 cursor-pointer" onclick="this.parentNode.submit();">
-                    <div class="font-bold text-2xl text-center font-bold">
+                    <div class="font-bold text-2xl text-center">
                         {{ $monthName }}
                     </div>
-                    <div class="text-center font-bold h-6 text-xl text-red-600">
-                        {{  number_format($totals) ? : ''}}
+                    <div class="text-center font-semibold h-6 text-lg text-red-600">
+                        @if ($totals !== null && $totals != 0)
+                            {{ number_format($totals,2) }}
+                        @endif
                     </div>
                 </div>
             </form>

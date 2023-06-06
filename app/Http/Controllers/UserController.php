@@ -67,6 +67,12 @@ class UserController extends Controller
 
 
     }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect('/')->with('success', 'Logged out successfully!');
+    }
     /**
      * Display the specified resource.
      *

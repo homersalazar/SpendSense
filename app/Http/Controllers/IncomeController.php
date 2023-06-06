@@ -224,7 +224,13 @@ class IncomeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $item = Budget::find($id);
+
+        if ($item) {
+            $item->delete();
+            return response()->json(['message' => 'Item deleted successfully']);
+        }
+        return response()->json(['message' => 'Item not found'], 404);
     }
 }
 

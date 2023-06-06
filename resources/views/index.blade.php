@@ -1,22 +1,35 @@
 @extends('layouts.partials')
 
 @section('contents')
-    <div class="h-screen flex flex-col justify-center">
-        <!-- First Row -->
-        <div class="flex items-center justify-center">
-            <p class="text-3xl font-semibold text-[#72EB3A]">SpendSense</p>
+    <div class="flex flex-col justify-center items-center h-screen">
+        <div>
+            <h1 class="text-4xl font-bold text-[var(--sc)]">SpendSense</h1>
         </div>
-
-        <div class="flex items-center justify-center">
-            <img src="{{ asset('storage/assets/index-logo.png') }}" alt="Logo" class="w-64 h-64">
+        <div class="piggy-wrapper">
+            <div class="piggy-wrap">
+                <div class="piggy">
+                    <div class="nose"></div>
+                    <div class="mouth"></div>
+                    <div class="ear"></div>
+                    <div class="tail">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div class="eye"></div>
+                    <div class="hole"></div>
+                </div>
+            </div>
+            <div class="coin-wrap">
+                <div class="coin">$</div>
+            </div>
+            <div class="legs"></div>
+            <div class="legs back"></div>
         </div>
-
-        <!-- Second Row -->
-        <div class="flex justify-center mt-8">
-        <div class="flex space-x-4">
+        <div class="flex space-x-4 pt-4">
             <a href="{{ route('user.index') }}" class="px-4 py-2 text-white rounded bg-[var(--sc)] hover:bg-[var(--pc)]">Log in</a>
             <a href="{{ route('user.create') }}" class="px-4 py-2 text-white rounded bg-[var(--sc)] hover:bg-[var(--pc)]">Sign up</a>
-        </div>
         </div>
     </div>
 

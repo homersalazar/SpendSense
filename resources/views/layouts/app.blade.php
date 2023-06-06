@@ -22,16 +22,21 @@
           <a href="/income" class="text-3xl text-white py-4 font-semibold">Income</a>
           <a href="/expense" class="text-3xl text-white py-4 font-semibold">Expense</a>
           <a href="/report" class="text-3xl text-white py-4 font-semibold">Report</a>
-          <a href="#" class="text-3xl text-white py-4 font-semibold">Misc</a>
+          <a href="/logout" class="text-3xl text-white py-4 font-semibold">Logout</a>
         </div>
     </div>
-
-    <div class="grid grid-cols-2 p-4 border-t-8 border-[#99b865]">
-        <div class="col-start-1 text-2xl">
-            <span className="font-bold text-white">SpendSense</span>
+    <div class="grid grid-cols-1 p-4 sticky top-0">
+        <div class="col-start-1 text-3xl max-sm:text-2xl">
+            <span class="font-bold">SpendSense</span>
+        </div>
+        <div class="col-span-4 text-center text-2xl max-sm:hidden">
+            <a href="/income" class="text-xl px-5 font-bold">Income</a>
+            <a href="/expense" class="text-xl px-5 font-bold">Expense</a>
+            <a href="/report" class="text-xl px-5 font-bold">Report</a>
+            <a href="/logout" class="text-xl px-5 font-bold">Logout</a>
         </div>
         <div class="col-end-7">
-            <span class="text-3xl cursor-pointer md:hidden" onclick="openNav()">&#9776;</span>
+            <span class="text-3xl cursor-pointer md:hidden" onclick="openNav()"><i class="fas fa-hamburger"></i></span>
         </div>
     </div>
     <div class="container-fluid">
@@ -50,7 +55,6 @@
         @endif
     </script>
 
-    <script src="{{ asset('js/custom.js') }}"></script>
     <script>
         const openNav = () => {
           document.getElementById("myNav").classList.remove('hidden');

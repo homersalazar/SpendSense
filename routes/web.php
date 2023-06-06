@@ -25,6 +25,7 @@ Route::get('/', function () {
 //LOGIN & SIGNUP
 Route::resource('/user', UserController::class);
 Route::post('/login', [UserController::class, 'login'])->name('login');
+Route::get('/logout', [UserController::class, 'logout']);
 
 //income
 Route::resource('/income', IncomeController::class); // first

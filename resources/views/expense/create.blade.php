@@ -2,8 +2,8 @@
 
 @section('content')
     <div class="grid grid-rows-5 grid-cols-1 text-center border-b-2 border-[#adb071] pb-2">
-        <div class="font-bold text-lg">
-            <span class="font-bold">{{ $displayDate }}</span>
+        <div>
+            <span class="font-semibold text-xl max-sm:text-lg">{{ $displayDate }}</span>
         </div>
         <div class="text-4xl font-bold">{{ $day }}</div>
         <div class="text-xl text-[#99b26c] font-bold pt-2">Expense</div>
@@ -11,16 +11,24 @@
             {{ number_format($total, 2) }}
         </div>
     </div>
-    <div class="grid grid-rows-1 grid-cols-2 p-2 font-bold">
+    <div class="grid p-2 font-bold">
         <div>{{ $item }} item(s)</div>
-        <div class="text-right">DELETE</div>
     </div>
-    <div class="grid grid-rows-1 grid-cols-1 p-2 font-bold mb-11">
+    <div class="grid p-2 font-bold mb-11">
         <table>
             @foreach($table as $tables)
                 <tr class="border-b-2 border-[#adb071]">
                     <td>{{ ucwords($tables->details) }}</td>
                     <td class="text-right text-red-600">{{  number_format($tables->amount,2) }}</td>
+                    <td class="text-right">
+                        <form id="deleteForm" data-id="{{ $tables->id }}">
+                            @method('delete')
+                            @csrf
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fa-solid fa-trash text-red-500 md:mr-5"></i>
+                            </button>
+                        </form>
+                    </td>
                 </tr>
             @endforeach
         </table>
@@ -46,7 +54,7 @@
     <script>
         $(document).ready(function () {
             $("#expenseForm").submit(function (event) {
-                event.preventDefault(); // Prevent the default form submission
+                event.preventDefault();
 
                 $.ajax({
                     url: "{{ route('expense.store') }}",
@@ -55,12 +63,30 @@
                     dataType: 'json',
                     success: function (data) {
                         console.log(data);
-                        // Handle the success response here
                         window.location.reload();
                     },
                     error: function (error) {
                         console.log(error);
-                        // Handle the error response here
+                    }
+                });
+            });
+
+            $("#deleteForm").submit(function (event) {
+                event.preventDefault();
+                var form = $(this);
+                var id = form.data("id");
+
+                $.ajax({
+                    url: `/income/${id}`,
+                    type: "POST",
+                    data: { _method: "DELETE", _token: "{{ csrf_token() }}" },
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        window.location.reload();
+                    },
+                    error: function (error) {
+                        console.log(error);
                     }
                 });
             });

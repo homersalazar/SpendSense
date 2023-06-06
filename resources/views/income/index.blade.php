@@ -34,10 +34,10 @@
                 <input type="hidden" name="month" value="{{ $month }}">
                 <input type="hidden" name="year" value="{{ $years }}">
                 <div class="bg-[var(--card)] rounded-lg p-4 cursor-pointer" onclick="this.parentNode.submit();">
-                    <div class="font-bold text-2xl text-center font-bold">
+                    <div class="font-bold text-2xl text-center">
                         {{ $monthName }}
                     </div>
-                    <div class="text-center font-bold h-6 text-lg text-green-900">
+                    <div class="text-center font-semibold h-6 text-lg text-green-900">
                         @if ($totals !== null && $totals != 0)
                             {{ number_format($totals,2) }}
                         @endif
